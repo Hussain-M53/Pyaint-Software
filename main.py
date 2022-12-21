@@ -1,4 +1,4 @@
-from ColorPalette import ColorPalette
+from ColorWindow import ColorWindow
 from ForGroundBackGroundColor import ForGroundBackGroundColor
 from utils import *
 from Theme import Theme
@@ -31,7 +31,7 @@ def draw_grid(win, grid):
 
 def draw_mouse_position_text(win):
     pos = pygame.mouse.get_pos()
-    pos_font = get_font(MOUSE_POSITION_TEXT_SIZE)
+    pos_font = get_font(MOUSE_POSITION_TEXT_SIZE,False)
     try:
         row, col = get_row_col_from_pos(pos)
         text_surface = pos_font.render(str(row) + ", " + str(col), 1, BLACK)
@@ -40,11 +40,11 @@ def draw_mouse_position_text(win):
         for button in buttons:
             if not button.hover(pos):
                 continue
-            if button.text == "Clear":
+            if button.name == "Clear":
                 text_surface = pos_font.render("Clear Everything", 1, BLACK)
                 win.blit(text_surface, (10 , HEIGHT - TOOLBAR_HEIGHT))
                 break
-            if button.text == "Erase":
+            if button.name == "Erase":
                 text_surface = pos_font.render("Erase", 1, BLACK)
                 win.blit(text_surface, (10 , HEIGHT - TOOLBAR_HEIGHT))
                 break
@@ -60,7 +60,7 @@ def draw_mouse_position_text(win):
             #     text_surface = pos_font.render("Swap Toolbar", 1, BLACK)
             #     win.blit(text_surface, (10 , HEIGHT - TOOLBAR_HEIGHT))
             #     break
-            if button.name == theme.getMode():
+            if button.name == "Theme":
                 text_surface = pos_font.render("Swap Theme", 1, BLACK)
                 win.blit(text_surface, (10 , HEIGHT - TOOLBAR_HEIGHT))
                 break
@@ -77,7 +77,7 @@ def draw_mouse_position_text(win):
                 text_surface = pos_font.render("ColorPicker", 1, BLACK)
                 win.blit(text_surface, (10 , HEIGHT - TOOLBAR_HEIGHT))
                 break
-            if button.name == "ColorPalette":
+            if button.name == "ColorWindow":
                 text_surface = pos_font.render("ColorPalette", 1, BLACK)
                 win.blit(text_surface, (10 , HEIGHT - TOOLBAR_HEIGHT))
                 break
@@ -267,29 +267,29 @@ button_space = 42
 buttons = []
 
 for i in range(int(len(COLORS)/2)):
-    buttons.append( Button(100 + button_space * i, button_y_top_row, button_width, button_height, COLORS[i]) )
+    buttons.append( Button(100 + button_space * i, button_y_top_row, button_width, button_height, COLORS[i],isBorder=True) )
 
 for i in range(int(len(COLORS)/2)):
-    buttons.append( Button(100 + button_space * i, button_y_bot_row, button_width, button_height, COLORS[i + int(len(COLORS)/2)]) )
+    buttons.append( Button(100 + button_space * i, button_y_bot_row, button_width, button_height, COLORS[i + int(len(COLORS)/2)],isBorder=True) )
 
 #Right toolbar buttons
 # need to add change toolbar button.
 for i in range(10):
     if i == 0:
-        buttons.append(Button(HEIGHT - 2*button_width,(i*button_height)+5,button_width,button_height,WHITE,text=theme.getMode(),name="Theme"))#Dark and Light Theme
+        buttons.append(Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,(i*button_height)+10,65,30,WHITE,image_url = "assets/dark.png",name="Theme"))#Dark and Light Theme
     else: 
-        buttons.append(Button(HEIGHT - 2*button_width,(i*button_height)+5,button_width,button_height,WHITE,"B"+str(i-1), BLACK))#append tools
+        buttons.append(Button(HEIGHT - 2*button_width,(i*button_height)+5,button_width,button_height,WHITE,"B"+str(i-1), BLACK,isBorder=True))#append tools
 
-buttons.append(Button(WIDTH - button_space, button_y_top_row, button_width, button_height, WHITE, name="Erase", image_url="assets/eraser.png"))  # Erase Button
-buttons.append(Button(WIDTH - button_space, button_y_bot_row, button_width, button_height, WHITE, "Clear", BLACK))  # Clear Button
-buttons.append(Button(WIDTH - 3*button_space + 5, button_y_top_row,button_width-5, button_height-5, name = "FillBucket",image_url="assets/paint-bucket.png")) #FillBucket
-buttons.append(Button(WIDTH - 3*button_space + 5, button_y_bot_row,button_width-5, button_height-5, name = "Brush",image_url="assets/paint-brush.png")) #Brush
+buttons.append(Button(WIDTH - button_space-10, button_y_top_row, 51, 27.92, WHITE, name="Erase", image_url="assets/eraser.png"))  # Erase Button
+buttons.append(Button(WIDTH - button_space-10, button_y_bot_row, 51, 27.92, WHITE, name="Clear", image_url="assets/clear.png"))  # Clear Button
+buttons.append(Button(WIDTH - 3*button_space + 20, button_y_top_row,button_width-5, button_height-5, name = "FillBucket",image_url="assets/paint-bucket.png")) #FillBucket
+buttons.append(Button(WIDTH - 3*button_space + 20, button_y_bot_row,button_width-5, button_height-5, name = "Brush",image_url="assets/paint-brush.png")) #Brush
 buttons.append(Button(WIDTH - 3*button_space + 140, 480,button_width-5, button_height-5, name = "ColorPicker",image_url="assets/color-picker.png")) #ColorPicker
-buttons.append(Button(WIDTH - 3*button_space + 140, 530,button_width-5, button_height-5, name = "ColorPalette",image_url="assets/color-palette.png")) #ColorPalette
+buttons.append(Button(WIDTH - 3*button_space + 140, 530,button_width-5, button_height-5, name = "ColorWindow",image_url="assets/color-palette.png")) #ColorPalette
 
 # background = Button(0, HEIGHT - TOOLBAR_HEIGHT/2 - 30, 60, 60, drawing_color)
-background = Button(30, HEIGHT - TOOLBAR_HEIGHT/2 - 15 , button_width, button_height, forbackground.getBackgroundColor(),name="background")
-forground = Button(10, HEIGHT - TOOLBAR_HEIGHT/2 - 30, button_width,button_height, forbackground.getForegroundColor(),name="foreground")
+background = Button(30, HEIGHT - TOOLBAR_HEIGHT/2 - 15 , button_width, button_height, forbackground.getBackgroundColor(),name="background",isBorder=True)
+forground = Button(10, HEIGHT - TOOLBAR_HEIGHT/2 - 30, button_width,button_height, forbackground.getForegroundColor(),name="foreground",isBorder=True)
 buttons.append(background)
 buttons.append(forground)
 picking = False
@@ -306,7 +306,6 @@ while run:
                 if picking:
                     pickedColor = pickColor()
                     drawing_color = pickedColor
-                    picking = False
                     if back:
                         background.color = drawing_color
                     if fore:
@@ -323,7 +322,7 @@ while run:
                     if not button.clicked(pos):
                         continue
 
-                    if button.text == "Clear":
+                    if button.name == "Clear":
                         grid = init_grid(ROWS, COLS, WHITE)
                         drawing_color = BLACK
                         background.color = drawing_color
@@ -336,12 +335,14 @@ while run:
                         break
                     if button.name == "Theme" and theme.getMode() == 'dark':
                         theme.setMode('light')
-                        buttons.append(Button(HEIGHT - 2*button_width,(0*button_height)+5,button_width,button_height,WHITE,text=theme.getMode(),name="Theme"))
+                        buttons.pop(18)
+                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,10,65,30,WHITE,image_url = "assets/dark.png",name="Theme"))
                         BG_COLOR = WHITE
                         break
                     if button.name == "Theme" and theme.getMode() == 'light':
                         theme.setMode('dark')
-                        buttons.append(Button(HEIGHT - 2*button_width,(0*button_height)+5,button_width,button_height,WHITE,text=theme.getMode(),name="Theme"))
+                        buttons.pop(18)
+                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,10,65,30,WHITE,image_url = "assets/light.png",name="Theme"))
                         BG_COLOR = DARKGRAY
                         break
 
@@ -364,9 +365,9 @@ while run:
                     if button.name == "ColorPicker":
                         picking=True
                         break
-                    if button.name == "ColorPalette":
-                        pal = ColorPalette()
-                        pal.run()
+                    if button.name == "ColorWindow":
+                        pal = ColorWindow(theme)
+                        pal.run(WIN)
                         break
 
                     if button.name == "background":

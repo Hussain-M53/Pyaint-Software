@@ -2,7 +2,7 @@ from turtle import pos
 from .settings import *
 
 class Button:
-    def __init__(self, x, y, width, height, color = (0, 0, 0), text=None, text_color=BLACK, shape = "rectangle", image_url = "/", name=None):
+    def __init__(self, x, y, width, height, color = (0, 0, 0), text=None, text_color=BLACK, shape = "rectangle", image_url = "/", name=None,pallete =False,isBorder=False):
         self.x = x
         self.y = y
         self.width = width
@@ -13,6 +13,9 @@ class Button:
         self.text_color = text_color
         self.image_url = image_url
         self.name = name
+        self.border_color = DARKGRAY
+        self.isPallete = pallete
+        self.isBorder=isBorder
 
     def draw(self, win):
         # Draws button with an image
@@ -24,16 +27,15 @@ class Button:
 
         elif self.shape == "rectangle":
             pygame.draw.rect(win, self.color,(self.x, self.y, self.width, self.height))
-            pygame.draw.rect(win, BLACK,(self.x, self.y, self.width, self.height), 2)
+            if self.isBorder:
+                pygame.draw.rect(win, BLACK,(self.x, self.y, self.width, self.height), 2)
 
         elif self.shape == "ellipse":
             pygame.draw.ellipse(win, self.color, (self.x, self.y, self.width, self.height)) #fill
             # pygame.draw.ellipse(win, BLACK, (self.x, self.y, self.width, self.height), 2) #border
 
-        
-
         if self.text:
-            button_font = get_font(int(self.width/2) - 6)
+            button_font = get_font(int(self.width/2) - 6,self.isPallete)
             text_surface = button_font.render(self.text, 1, self.text_color)
             win.blit(text_surface, (self.x + self.width/2 - text_surface.get_width()/2, self.y + self.height/2 - text_surface.get_height()/2))
 

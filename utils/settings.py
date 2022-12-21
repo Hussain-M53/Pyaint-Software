@@ -20,6 +20,7 @@ OLIVE           = (128, 128, 0)
 TEAL            = (0, 128, 128)
 GREEN           = (0, 128, 0)
 FUCHSIA         = (255, 0, 255)
+BG_COLOR_PALLETE_WINDOW = (233, 228, 228)
 
 COLORS = []
 COLORS.append(WHITE)
@@ -61,5 +62,8 @@ MOUSE_POSITION_TEXT_SIZE = 12
 
 BRUSH_SIZE = 1  #can be 2, 3, 4 or any other value
 
-def get_font(size):
-    return pygame.font.SysFont("arial", size)
+def get_font(size,pallete):
+    if not pallete:
+        return pygame.font.SysFont("arial", size)
+    else:
+        return pygame.font.SysFont("Lato", size)
