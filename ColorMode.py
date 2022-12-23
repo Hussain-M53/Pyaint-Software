@@ -1,12 +1,10 @@
 import pygame
+from Mode import Mode
 from utils import *
 
 class ColorMode:
     def __init__(self,color_window_rect,color_window_heading_rect ):
-        self.text1 = "Red"
-        self.text2 = "Green"
-        self.text3 = "Blue"
-        self.isRGB = True
+        self.mode = Mode()
         self.color_mode_rect = pygame.Rect(
             color_window_rect.x+color_window_rect.w-270, color_window_heading_rect.y+color_window_heading_rect.h+5, 260, 130)
         self.buttons= []
@@ -20,21 +18,21 @@ class ColorMode:
                                    self.color_mode_rect.y+10, 46, 20, image_url="assets/hsv_toggle.png", name="toggle"))
         # input box 1
         self.buttons.append(Button(self.color_mode_rect.x+20, self.color_mode_rect.y+35,
-                            60, 20, COLOR_PALLETE_RECT, self.text1, RED, name="input_box_rh_text", pallete=True,))
+                            60, 20, COLOR_PALLETE_RECT, self.mode.text1, RED, name="input_box_rh_text", pallete=True,))
         self.buttons.append(Button(self.color_mode_rect.x+20,
                             self.color_mode_rect.y+55, 60, 20, BG_COLOR_PALLETE_WINDOW, name="input_box_rh", isBorderRadius=True))
         self.buttons.append(Button(self.color_mode_rect.x+20, self.color_mode_rect.y+55,
                                    60, 20, BG_COLOR_PALLETE_WINDOW, text_color=GRAY, name="input_box_rh_input", pallete=True,))
         # input box 2
         self.buttons.append(Button(self.color_mode_rect.x+90, self.color_mode_rect.y+35,
-                            60, 20, COLOR_PALLETE_RECT, self.text2, GREEN, name="input_box_gs_text", pallete=True))
+                            60, 20, COLOR_PALLETE_RECT, self.mode.text2, GREEN, name="input_box_gs_text", pallete=True))
         self.buttons.append(Button(self.color_mode_rect.x+90,
                             self.color_mode_rect.y+55, 60, 20, BG_COLOR_PALLETE_WINDOW, name="input_box_gs", isBorderRadius=True))
         self.buttons.append(Button(self.color_mode_rect.x+90, self.color_mode_rect.y+55,
                                    60, 20, BG_COLOR_PALLETE_WINDOW, text_color=GRAY, name="input_box_gs_input", pallete=True))
         # input box 3
         self.buttons.append(Button(self.color_mode_rect.x+160, self.color_mode_rect.y+35, 60,
-                            20, COLOR_PALLETE_RECT, self.text3, BLUE, name="input_box_bv_text", pallete=True))
+                            20, COLOR_PALLETE_RECT, self.mode.text3, BLUE, name="input_box_bv_text", pallete=True))
         self.buttons.append(Button(self.color_mode_rect.x+160,
                             self.color_mode_rect.y+55, 60, 20, BG_COLOR_PALLETE_WINDOW, name="input_box_bv", isBorderRadius=True))
         self.buttons.append(Button(self.color_mode_rect.x+160, self.color_mode_rect.y+55, 60,
