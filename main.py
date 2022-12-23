@@ -6,6 +6,7 @@ WIN = pygame.display.set_mode((WIDTH + RIGHT_TOOLBAR_WIDTH, HEIGHT))
 pygame.display.set_caption("Pyaint")
 STATE = "COLOR"
 theme = Theme()
+color_window = ColorWindow(theme)
 forbackground = ForGroundBackGroundColor()
 back = True
 fore = False
@@ -358,8 +359,7 @@ while run:
                         print(picking)
                         break
                     if button.name == "ColorWindow":
-                        pal = ColorWindow(theme)
-                        pal.run(WIN)
+                        color_window.run(WIN)
                         break
 
                     if button.name == "background":
