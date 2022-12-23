@@ -13,6 +13,7 @@ class ColorWindow:
         self.theme = theme
         self.custom_color_index = 1
         self.custom_gradient_index = 1
+        self.color_gradient_image = pygame.image.load("assets/color_gradient.png")
         if (self.theme.getMode() == "dark"):
             self.bg_color = DARKGRAY
             self.text_color = BG_COLOR_PALLETE_WINDOW
@@ -209,8 +210,19 @@ class ColorWindow:
         self.color_mixer.buttons[(self.get_index(
             "color_mixer_preview_box", self.color_mixer.buttons))].color = (color_rh, color_gs, color_bv)
 
-    def add_to_custom_gradients(self):
+    def preview_gradient(self, color):
+        self.gradient.buttons[(self.get_index(
+            "gradient_preview_box", self.gradient.buttons))].color = (color[0],color[1],color[2])
+
+    def add_to_custom_gradients(self, btns, text):
         print("added to custom gradients")
+        print(self.custom_gradient_index)
+        if self.custom_gradient_index> 15:
+            print("zero")
+            self.custom_gradient_index = 0
+        color = btns[(self.get_index(text, btns))].color
+        self.custom_gradients_buttons[self.custom_gradient_index].color = color
+        self.custom_gradient_index += 1
 
     def add_to_custom_color(self, btns,text):
         print("added to custom colors")
@@ -285,7 +297,7 @@ class ColorWindow:
         gs.init_slider()
 
         # gd = Gradient(win, self.color_gradient_rect)
-
+        # opacity = 128  # half opaque
         running = True
         while running:
             pygame.display.update()
@@ -293,6 +305,15 @@ class ColorWindow:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:  # if user closed the program
                     running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    # Get the mouse position
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    # Get the color of the pixel at the mouse position
+                    if mouse_x > 43 and mouse_x < 162 and mouse_y>305 and mouse_y <383:
+                        color = win.get_at((mouse_x, mouse_y))
+                        # print(opacity)
+                        self.preview_gradient(color)
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y  = event.pos[0], event.pos[1]
                     if x > 45 and x < 180 and y > 196 and y < 220:
@@ -338,21 +359,9 @@ class ColorWindow:
                         elif button.name == "input_gradient_box1_input":
                             button.isBorder = True
                             button.input_box_selected = True
-                if event.type == pygame.KEYDOWN:
-                    for button in self.gradient.buttons:
-                        if button.name == "input_gradient_box1_input":
-                            if event.key == pygame.K_BACKSPACE:
-                                userInput = button.text
-                                userInput = userInput[:-1]
-                                button.text = userInput
-                            elif (
-                                    event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9
-                                ) and len(button.text) < 3:
-                                userInput = button.text
-                                userInput += event.unicode
-                                if int(userInput) > 100:
-                                    userInput = userInput[0:2]
-                                button.text = userInput
+                        elif button.name == "add_to_custom_gradient":
+                            self.add_to_custom_gradients(self.color_mode.buttons,"gradient_preview_box")
+                            # self.reset_color_mode_inputs()
 
                     for button in self.color_mixer.buttons:
                         if not button.clicked(pos):
@@ -406,6 +415,21 @@ class ColorWindow:
                                 button.text = userInput
                                 self.preview_color(self.color_mode.buttons)
 
+                    for button in self.gradient.buttons:
+                        if button.name == "input_gradient_box1_input":
+                            if event.key == pygame.K_BACKSPACE:
+                                userInput = button.text
+                                userInput = userInput[:-1]
+                                button.text = userInput
+                            elif (
+                                    event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9
+                                ) and len(button.text) < 3:
+                                userInput = button.text
+                                userInput += event.unicode
+                                if int(userInput) > 100:
+                                    userInput = userInput[0:2]
+                                button.text = userInput
+                                # opacity = button.text
 
                     for button in self.color_mixer.buttons:
                         if ((button.name == "input_box1_rh_input" or button.name == "input_box1_gs_input"or button.name == "input_box1_bv_input" or button.name == "input_box2_rh_input" or button.name == "input_box2_gs_input"or button.name == "input_box2_bv_input") and button.input_box_selected):

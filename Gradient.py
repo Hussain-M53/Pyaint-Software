@@ -98,9 +98,9 @@ class Gradient:
                                    name="gradient_preview_box"))
         # add to custom button
         self.buttons.append(Button(self.color_gradient_rect.x + 135, self.color_gradient_rect.y + 100,
-                                   120, 28, BG_COLOR_PALLETE_WINDOW, name="add_to_custom_colors", isBorderRadius=True))
+                                   120, 28, BG_COLOR_PALLETE_WINDOW, name="add_to_custom_gradient", isBorderRadius=True))
         self.buttons.append(Button(self.color_gradient_rect.x + 175, self.color_gradient_rect.y + 100,
-                                   40, 30, BG_COLOR_PALLETE_WINDOW, "Add To Custom Colors", GRAY))
+                                   40, 30, BG_COLOR_PALLETE_WINDOW, "Add To Custom Gradient", GRAY))
 
         #color_gradient
         self.buttons.append(Button(self.color_gradient_rect.x + 8, self.color_gradient_rect.y + 40,
