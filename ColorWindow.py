@@ -1,6 +1,7 @@
 import math
 import pygame
 
+from Gradient import Gradient
 from Grayscale import Grayscale
 from utils import *
 from ColorMode import ColorMode
@@ -25,12 +26,14 @@ class ColorWindow:
         self.color_window_heading_rect = pygame.Rect(
             WIDTH/2-80, self.color_window_rect.x+55, 80, 40)
         # left-hand rects
-        self.grayscale = Grayscale(self.color_window_rect, self.color_window_heading_rect)
-        self.color_gradient_rect = pygame.Rect(
-            self.color_window_rect.x+10, self.grayscale.color_grayscale_rect.y+self.grayscale.color_grayscale_rect.h+10, 260, 130)
+        self.grayscale = Grayscale(
+            self.color_window_rect, self.color_window_heading_rect)
+        self.gradient = Gradient(
+            self.color_window_rect, self.grayscale.color_grayscale_rect)
         self.custom_gradient_rect = pygame.Rect(
-            self.color_window_rect.x+10, self.color_gradient_rect.y+self.color_gradient_rect.h+10, 260, 110)
+            self.color_window_rect.x+10, self.gradient.color_gradient_rect.y+self.gradient.color_gradient_rect.h+10, 260, 110)
         # right hand rects
+
         self.color_mode = ColorMode(
             self.color_window_rect, self.color_window_heading_rect)
         self.color_mixer = ColorMixer(
@@ -88,20 +91,16 @@ class ColorWindow:
         self.buttons.append(Button(self.color_window_heading_rect.x+self.color_window_heading_rect.w/2, self.color_window_heading_rect.y,
                             self.color_window_heading_rect.w, self.color_window_heading_rect.h, text="COLOR PALLETE", text_color=self.text_color, shape="", pallete=True))
 
-    # gradient mode structure
-        self.buttons.append(Button(self.color_gradient_rect.x+28,
-                            self.color_gradient_rect.y+10, 60, 20, COLOR_PALLETE_RECT, "GRADIENT", GRAY, pallete=True))
-
     # gradient pallete
         self.buttons.append(Button(self.custom_gradient_rect.x+70,
                             self.custom_gradient_rect.y+10, 60, 20, COLOR_PALLETE_RECT, "CUSTOM GRADIENTS", GRAY, pallete=True))
-        
+
         self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8, self.custom_gradient_rect.y+40,
                                                     28, 28, BG_COLOR_PALLETE_WINDOW, shape="ellipse", name="custom_gradient_1", isBorder=True))
         for i in range(1, 8):
             self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8+(i*3)+(28*(i)), self.custom_gradient_rect.y+40,
                                                         28, 28, BG_COLOR_PALLETE_WINDOW, shape="ellipse", name=f"custom_gradient_{i}", isBorder=True))
-        
+
         self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8, self.custom_gradient_rect.y+75,
                                                     28, 28, BG_COLOR_PALLETE_WINDOW, shape="ellipse", name="custom_gradient_9", isBorder=True))
         for i in range(9, 16):
@@ -126,6 +125,7 @@ class ColorWindow:
     def draw_buttons(self, win):
         self.color_mode.draw(win)
         self.color_mixer.draw(win)
+        self.gradient.draw(win)
         for button in self.buttons:
             button.draw(win)
         for button in self.custom_colors_buttons:
@@ -162,7 +162,12 @@ class ColorWindow:
 
     def mix_and_preview(self):
         print("mixing colors")
-        color1_rh=0;color1_gs=0;color1_bv=0;color2_rh=0;color2_gs=0;color2_bv=0
+        color1_rh = 0
+        color1_gs = 0
+        color1_bv = 0
+        color2_rh = 0
+        color2_gs = 0
+        color2_bv = 0
         if self.color_mixer.buttons[self.get_index("input_box1_rh_input", self.color_mixer.buttons)].text:
             color1_rh = int(self.color_mixer.buttons[self.get_index(
                 "input_box1_rh_input", self.color_mixer.buttons)].text)
@@ -198,7 +203,7 @@ class ColorWindow:
     def add_to_custom_gradients(self):
         print("added to custom gradients")
 
-    def add_to_custom_color(self, btns,text):
+    def add_to_custom_color(self, btns, text):
         print("added to custom colors")
         print(self.custom_color_index)
         if self.custom_color_index > 15:
@@ -235,16 +240,15 @@ class ColorWindow:
                          self.color_window_rect, border_radius=5)
         pygame.draw.rect(win, GRAY, (WIDTH/2-(self.width/2), HEIGHT/2-(self.height/2)-50,
                          self.width, 30), border_top_left_radius=5, border_top_right_radius=4)
-
-        pygame.draw.rect(win, COLOR_PALLETE_RECT,
-                         self.color_gradient_rect, border_radius=6)
         pygame.draw.rect(win, COLOR_PALLETE_RECT,
                          self.custom_color_rect, border_radius=6)
         pygame.draw.rect(
             win, COLOR_PALLETE_RECT, self.custom_gradient_rect, border_radius=4)
 
-        #Grayscale Slider
+        # Grayscale Slider
         self.grayscale.init_slider(win)
+
+        # gd = Gradient(win, self.color_gradient_rect)
 
         running = True
         while running:
@@ -254,9 +258,9 @@ class ColorWindow:
                 if event.type == pygame.QUIT:  # if user closed the program
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    x, y  = event.pos[0], event.pos[1]
+                    x, y = event.pos[0], event.pos[1]
                     if x > 45 and x < 180 and y > 196 and y < 220:
-                        self.grayscale.drawSlider(x,win)
+                        self.grayscale.drawSlider(x, win)
                 # Check for QUIT event
                 if pygame.mouse.get_pressed()[0]:
                     pos = pygame.mouse.get_pos()
@@ -276,18 +280,46 @@ class ColorWindow:
                             if self.color_mode.mode.isRGB:
                                 button.image_url = "assets/rgb_toggle.png"
                                 self.color_mode.mode.isRGB = False
-                                self.color_mode.mode.set_mode_text(self.color_mode.buttons,"Hue","Sat","Value")
+                                self.color_mode.mode.set_mode_text(
+                                    self.color_mode.buttons, "Hue", "Sat", "Value")
                             else:
                                 button.image_url = "assets/hsv_toggle.png"
                                 self.color_mode.mode.isRGB = True
-                                self.color_mode.mode.set_mode_text(self.color_mode.buttons,"Red","Green","Blue")
+                                self.color_mode.mode.set_mode_text(
+                                    self.color_mode.buttons, "Red", "Green", "Blue")
 
                         elif button.name == "input_box_rh_input" or button.name == "input_box_gs_input" or button.name == "input_box_bv_input":
                             button.isBorder = True
                             button.input_box_selected = True
                         elif button.name == "add_to_custom_colors":
-                            self.add_to_custom_color(self.color_mode.buttons,"color_mode_preview_box")
+                            self.add_to_custom_color(
+                                self.color_mode.buttons, "color_mode_preview_box")
                             self.reset_color_mode_inputs()
+
+                    for button in self.gradient.buttons:
+                        if not button.clicked(pos):
+                            if (button.name == "input_gradient_box1_input") and button.input_box_selected:
+                                button.input_box_selected = False
+                                button.isBorder = False
+                            continue
+                        elif button.name == "input_gradient_box1_input":
+                            button.isBorder = True
+                            button.input_box_selected = True
+                if event.type == pygame.KEYDOWN:
+                    for button in self.gradient.buttons:
+                        if button.name == "input_gradient_box1_input":
+                            if event.key == pygame.K_BACKSPACE:
+                                userInput = button.text
+                                userInput = userInput[:-1]
+                                button.text = userInput
+                            elif (
+                                event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9
+                            ) and len(button.text) < 3:
+                                userInput = button.text
+                                userInput += event.unicode
+                                if int(userInput) > 100:
+                                    userInput = userInput[0:2]
+                                button.text = userInput
 
                     for button in self.color_mixer.buttons:
                         if not button.clicked(pos):
@@ -300,17 +332,20 @@ class ColorWindow:
                             if self.color_mixer.mode.isRGB:
                                 button.image_url = "assets/rgb_toggle.png"
                                 self.color_mixer.mode.isRGB = False
-                                self.color_mixer.mode.set_mode_text(self.color_mixer.buttons,"Hue","Sat","Value")
+                                self.color_mixer.mode.set_mode_text(
+                                    self.color_mixer.buttons, "Hue", "Sat", "Value")
                             else:
                                 button.image_url = "assets/hsv_toggle.png"
                                 self.color_mixer.mode.isRGB = True
-                                self.color_mixer.mode.set_mode_text(self.color_mixer.buttons,"Red","Green","Blue")
+                                self.color_mixer.mode.set_mode_text(
+                                    self.color_mixer.buttons, "Red", "Green", "Blue")
 
                         elif button.name == "input_box1_rh_input" or button.name == "input_box1_gs_input" or button.name == "input_box1_bv_input" or button.name == "input_box2_rh_input" or button.name == "input_box2_gs_input" or button.name == "input_box2_bv_input":
                             button.isBorder = True
                             button.input_box_selected = True
                         elif button.name == "add_to_custom_colors":
-                            self.add_to_custom_color(self.color_mixer.buttons,"color_mixer_preview_box")
+                            self.add_to_custom_color(
+                                self.color_mixer.buttons, "color_mixer_preview_box")
                             self.reset_mixer_inputs()
 
                 if event.type == pygame.KEYDOWN:
@@ -341,9 +376,8 @@ class ColorWindow:
                                 button.text = userInput
                                 self.preview_color(self.color_mode.buttons)
 
-
                     for button in self.color_mixer.buttons:
-                        if ((button.name == "input_box1_rh_input" or button.name == "input_box1_gs_input"or button.name == "input_box1_bv_input" or button.name == "input_box2_rh_input" or button.name == "input_box2_gs_input"or button.name == "input_box2_bv_input") and button.input_box_selected):
+                        if ((button.name == "input_box1_rh_input" or button.name == "input_box1_gs_input" or button.name == "input_box1_bv_input" or button.name == "input_box2_rh_input" or button.name == "input_box2_gs_input" or button.name == "input_box2_bv_input") and button.input_box_selected):
                             if event.key == pygame.K_BACKSPACE:
                                 userInput = button.text
                                 userInput = userInput[:-1]

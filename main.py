@@ -366,16 +366,21 @@ while run:
                     elif button.name == "Brush":
                         STATE = "COLOR"
                         break
-                    elif button.name == "ColorWindow":
+
+                    if button.name == "ColorPicker":
+                        picking= not picking
+                        print(picking)
+                        break
+                    if button.name == "ColorWindow":
                         color_window.run(WIN)
                         break
                     elif button.name == "background":
                         back = True
-                        fore = False
+                        fore = False 
                         drawing_color = button.color
-                        background.color, forground.color = forground.color, background.color
-                        break
-                    elif button.name == "foreground":
+                        background.color,forground.color = forground.color,background.color  
+
+                    if button.name == "foreground":
                         drawing_color = button.color
                         back = False
                         fore = True
