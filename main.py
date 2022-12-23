@@ -41,6 +41,7 @@ def draw_mouse_position_text(win):
         for button in buttons:
             if not button.hover(pos):
                 continue
+            
             if button.name == "Clear":
                 text_surface = pos_font.render("Clear Everything", 1, BLACK)
                 win.blit(text_surface, (10 , HEIGHT - TOOLBAR_HEIGHT))
@@ -118,9 +119,9 @@ def draw(win, grid, buttons):
 
 def draw_brush_widths(win):
     brush_widths = [
-        Button(rtb_x - size_small/2, 580, size_small, size_small, drawing_color, None, None, "ellipse"),
-        Button(rtb_x - size_medium/2, 610, size_medium, size_medium, drawing_color, None, None, "ellipse") ,
-        Button(rtb_x - size_large/2, 645, size_large, size_large, drawing_color, None, None, "ellipse")
+        Button(rtb_x - size_small/2, 568, size_small, size_small, drawing_color, None, None, "ellipse"),
+        Button(rtb_x - size_medium/2, 568+size_small+5, size_medium, size_medium, drawing_color, None, None, "ellipse") ,
+        Button(rtb_x - size_large/2, 568+size_small+size_medium+10, size_large, size_large, drawing_color, None, None, "ellipse")
     ]
     for button in brush_widths:
         button.draw(win)
@@ -244,16 +245,10 @@ size_large = 50
 
 rtb_x = WIDTH + RIGHT_TOOLBAR_WIDTH/2
 brush_widths = [
-    Button(rtb_x - size_small/2, 580, size_small, size_small, drawing_color, None, "ellipse"),
-    Button(rtb_x - size_medium/2, 610, size_medium, size_medium, drawing_color, None, "ellipse") ,
-    Button(rtb_x - size_large/2, 645, size_large, size_large, drawing_color, None, "ellipse")
+    Button(rtb_x - size_small/2, 565, size_small, size_small, drawing_color, None, "ellipse"),
+    Button(rtb_x - size_medium/2, 565+size_small+5, size_medium, size_medium, drawing_color, None, "ellipse") ,
+    Button(rtb_x - size_large/2, 565+size_small+size_medium+10, size_large, size_large, drawing_color, None, "ellipse")
 ]
-
-button_y_top_row = HEIGHT - TOOLBAR_HEIGHT/2  - button_height - 1
-button_y_bot_row = HEIGHT - TOOLBAR_HEIGHT/2   + 1
-button_space = 42
-
-
 # Adding Buttons
 buttons = []
 
@@ -267,16 +262,16 @@ for i in range(int(len(COLORS)/2)):
 # need to add change toolbar button.
 for i in range(10):
     if i == 0:
-        buttons.append(Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,(i*button_height)+10,65,38,WHITE,image_url = "assets/dark.png",name="Theme"))#Dark and Light Theme
+        buttons.append(Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2-2,(i*button_height)+10,70,38,WHITE,image_url = "assets/dark.png",name="Theme"))#Dark and Light Theme
     else: 
-        buttons.append(Button(HEIGHT - 2*button_width,(i*button_height)+5,button_width,button_height,WHITE,"B"+str(i-1), BLACK,isBorder=True))#append tools
+        buttons.append(Button(HEIGHT - 2*button_width,(i*button_height)+15,button_width,button_height,WHITE,"B"+str(i-1), BLACK,isBorder=True))#append tools
 
-buttons.append(Button(WIDTH - button_space-10, button_y_top_row, 51, 27.92, WHITE, name="Erase", image_url="assets/eraser.png"))  # Erase Button
-buttons.append(Button(WIDTH - button_space-10, button_y_bot_row, 51, 27.92, WHITE, name="Clear", image_url="assets/clear.png"))  # Clear Button
+buttons.append(Button(WIDTH - button_space-10, button_y_top_row+4, 51, 27.92, WHITE, name="Erase", image_url="assets/eraser.png"))  # Erase Button
+buttons.append(Button(WIDTH - button_space-10, button_y_bot_row+4, 51, 27.92, WHITE, name="Clear", image_url="assets/clear.png"))  # Clear Button
 buttons.append(Button(WIDTH - 3*button_space + 20, button_y_top_row,button_width-5, button_height-5, name = "FillBucket",image_url="assets/paint-bucket.png")) #FillBucket
 buttons.append(Button(WIDTH - 3*button_space + 20, button_y_bot_row,button_width-5, button_height-5, name = "Brush",image_url="assets/paint-brush.png")) #Brush
-buttons.append(Button(WIDTH - 3*button_space + 140, 480,button_width-5, button_height-5, name = "ColorPicker",image_url="assets/color-picker.png")) #ColorPicker
-buttons.append(Button(WIDTH - 3*button_space + 140, 530,button_width-5, button_height-5, name = "ColorWindow",image_url="assets/color-palette.png")) #ColorPalette
+buttons.append(Button(WIDTH - 3*button_space + 140, 460, 45, 45, name = "ColorPicker",image_url="assets/color-picker.png")) #ColorPicker
+buttons.append(Button(WIDTH - 3*button_space + 140, 510,45, 45, name = "ColorWindow",image_url="assets/color-palette.png")) #ColorPalette
 
 # background = Button(0, HEIGHT - TOOLBAR_HEIGHT/2 - 30, 60, 60, drawing_color)
 background = Button(30, HEIGHT - TOOLBAR_HEIGHT/2 - 15 , button_width, button_height, forbackground.getBackgroundColor(),name="background",isBorder=True)
@@ -328,13 +323,13 @@ while run:
                     if button.name == "Theme" and theme.getMode() == 'dark':
                         theme.setMode('light')
                         buttons.pop(18)
-                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,10,65,38,WHITE,image_url = "assets/dark.png",name="Theme"))
+                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2-2,10,70,38,WHITE,image_url = "assets/dark.png",name="Theme"))
                         BG_COLOR = WHITE
                         break
                     if button.name == "Theme" and theme.getMode() == 'light':
                         theme.setMode('dark')
                         buttons.pop(18)
-                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,10,65,38,WHITE,image_url = "assets/light.png",name="Theme"))
+                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2-2,10,70,38,WHITE,image_url = "assets/light.png",name="Theme"))
                         BG_COLOR = DARKGRAY
                         break
 

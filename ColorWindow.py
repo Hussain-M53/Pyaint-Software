@@ -24,11 +24,11 @@ class ColorWindow:
             WIDTH/2-80, self.color_window_rect.x+55, 80, 40)
         # left-hand rects
         self.color_grayscale_rect = pygame.Rect(
-            self.color_window_rect.x+10, self.color_window_heading_rect.y+self.color_window_heading_rect.h+5, 260, 130)
+            self.color_window_rect.x+10, self.color_window_heading_rect.y+self.color_window_heading_rect.h+5, 260, 150)
         self.color_gradient_rect = pygame.Rect(
             self.color_window_rect.x+10, self.color_grayscale_rect.y+self.color_grayscale_rect.h+10, 260, 130)
         self.custom_gradient_rect = pygame.Rect(
-            self.color_window_rect.x+10, self.color_gradient_rect.y+self.color_gradient_rect.h+10, 260, 130)
+            self.color_window_rect.x+10, self.color_gradient_rect.y+self.color_gradient_rect.h+10, 260, 110)
         # right hand rects
         self.color_mode = ColorMode(
             self.color_window_rect, self.color_window_heading_rect)
@@ -70,7 +70,7 @@ class ColorWindow:
             R = z + m
             G = m
             B = M
-        if h >= 300 and h < 360:
+        if h >= 300 and h <= 360:
             R = M
             G = m
             B = z + m
@@ -96,15 +96,15 @@ class ColorWindow:
     # gradient pallete
         self.buttons.append(Button(self.custom_gradient_rect.x+70,
                             self.custom_gradient_rect.y+10, 60, 20, COLOR_PALLETE_RECT, "CUSTOM GRADIENTS", GRAY, pallete=True))
-        self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8, self.custom_gradient_rect.y+50,
+        self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8, self.custom_gradient_rect.y+40,
                                                     28, 28, BG_COLOR_PALLETE_WINDOW, shape="ellipse", name="custom_gradient_1", isBorder=True))
         for i in range(1, 8):
-            self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8+(i*3)+(28*(i)), self.custom_gradient_rect.y+50,
+            self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8+(i*3)+(28*(i)), self.custom_gradient_rect.y+40,
                                                         28, 28, BG_COLOR_PALLETE_WINDOW, shape="ellipse", name=f"custom_gradient_{i}", isBorder=True))
-        self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8, self.custom_gradient_rect.y+90,
+        self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8, self.custom_gradient_rect.y+75,
                                                     28, 28, BG_COLOR_PALLETE_WINDOW, shape="ellipse", name="custom_gradient_9", isBorder=True))
         for i in range(9, 16):
-            self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8+(3*(i-8))+(28*(i-8)), self.custom_gradient_rect.y+90,
+            self.custom_gradients_buttons.append(Button(self.custom_gradient_rect.x+8+(3*(i-8))+(28*(i-8)), self.custom_gradient_rect.y+75,
                                                         28, 28, BG_COLOR_PALLETE_WINDOW, shape="ellipse", name=f"custom_gradient_{i}", isBorder=True))
 
     # color pallete
@@ -275,11 +275,11 @@ class ColorWindow:
                             if self.color_mode.isRGB:
                                 button.image_url = "assets/rgb_toggle.png"
                                 self.color_mode.isRGB = False
-                                self.set_mode_text(self.color_mode.buttons,"H","S","V")
+                                self.set_mode_text(self.color_mode.buttons,"Hue","Sat","Value")
                             elif not self.color_mode.isRGB:
                                 button.image_url = "assets/hsv_toggle.png"
                                 self.color_mode.isRGB = True
-                                self.set_mode_text(self.color_mode.buttons,"R","G","B")
+                                self.set_mode_text(self.color_mode.buttons,"Red","Green","Blue")
 
                         elif button.name == "input_box_rh_input" or button.name == "input_box_gs_input" or button.name == "input_box_bv_input":
                             button.isBorder = True
@@ -299,11 +299,11 @@ class ColorWindow:
                             if self.color_mixer.isRGB:
                                 button.image_url = "assets/rgb_toggle.png"
                                 self.color_mixer.isRGB = False
-                                self.set_mode_text(self.color_mixer.buttons,"H","S","V")
+                                self.set_mode_text(self.color_mixer.buttons,"Hue","Sat","Value")
                             elif not self.color_mixer.isRGB:
                                 button.image_url = "assets/hsv_toggle.png"
                                 self.color_mixer.isRGB = True
-                                self.set_mode_text(self.color_mixer.buttons,"R","G","B")
+                                self.set_mode_text(self.color_mixer.buttons,"Red","Green","Blue")
 
                         elif button.name == "input_box1_rh_input" or button.name == "input_box1_gs_input" or button.name == "input_box1_bv_input" or button.name == "input_box2_rh_input" or button.name == "input_box2_gs_input" or button.name == "input_box2_bv_input":
                             button.isBorder = True

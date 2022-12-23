@@ -47,7 +47,6 @@ class Button:
 
     def clicked(self, pos):
         x, y = pos
-
         if not (x >= self.x and x <= self.x + self.width):
             return False
         if not (y >= self.y and y <= self.y + self.height):
@@ -57,7 +56,6 @@ class Button:
 
     def hover(self, pos):
         x, y = pos
-
         if not (x >= self.x and x <= self.x + self.width):
             return False
         if not (y >= self.y and y <= self.y + self.height):

@@ -4,9 +4,9 @@ import pygame
 
 class ColorMixer:
     def __init__(self, color_window_rect, color_mode_rect):
-        self.text1 = "R"
-        self.text2 = "G"
-        self.text3 = "B"
+        self.text1 = "Red"
+        self.text2 = "Green"
+        self.text3 = "Blue"
         self.isRGB = True
         self.color_mixer_rect = pygame.Rect(
             color_window_rect.x+color_window_rect.w-270, color_mode_rect.y+color_mode_rect.h+10, 260, 150)
