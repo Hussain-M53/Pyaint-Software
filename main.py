@@ -96,7 +96,7 @@ def draw_mouse_position_text(win):
                 break
             if button.width == size_medium:
                 text_surface = pos_font.render("Medium-Sized Brush", 1, BLACK)
-                win.blit(text_surface, (10 , HEIGHT - TOOLBAR_HEIGHT))
+                win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.width == size_large:
                 text_surface = pos_font.render("Large-Sized Brush", 1, BLACK)
