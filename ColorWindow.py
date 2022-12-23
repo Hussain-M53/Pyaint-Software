@@ -244,10 +244,23 @@ class ColorWindow:
         for btn in buttons:
             if (btn.name == "input_box_rh_text"):
                 btn.text = t1
+                if t1 == "R":
+                    btn.text_color = RED
+                else:
+                    btn.text_color = PURPLE
+
             elif (btn.name == "input_box_gs_text"):
                 btn.text = t2
+                if t2 == "G":
+                    btn.text_color = GREEN
+                else:
+                    btn.text_color = PURPLE
             elif (btn.name == "input_box_bv_text"):
                 btn.text = t3
+                if t3 == "B":
+                    btn.text_color = BLUE
+                else:
+                    btn.text_color = PURPLE
 
     def run(self, win):
         pygame.draw.rect(win, self.bg_color,
