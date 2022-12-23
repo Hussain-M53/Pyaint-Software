@@ -33,7 +33,7 @@ def draw_mouse_position_text(win):
     pos = pygame.mouse.get_pos()
     pos_font = get_font(MOUSE_POSITION_TEXT_SIZE,False)
     try:
-        row, col = get_row_col_from_pos(pos)
+        row, col = ColorWindow.get_row_col_from_pos(pos)
         text_surface = pos_font.render(str(row) + ", " + str(col), 1, BLACK)
         win.blit(text_surface, (5 , HEIGHT - TOOLBAR_HEIGHT))
     except IndexError:
@@ -138,16 +138,6 @@ def draw_brush_widths(win):
         # Draw border
         pygame.draw.ellipse(win, border_color, (button.x, button.y, button.width, button.height), border_width) #border
 
-def get_row_col_from_pos(pos):
-    x, y = pos
-    row = y // PIXEL_SIZE
-    col = x // PIXEL_SIZE
-
-    if row >= ROWS:
-        raise IndexError
-    if col >= ROWS:
-        raise IndexError
-    return row, col
 
 def get_position(pos):
     x, y = pos
@@ -276,7 +266,7 @@ for i in range(int(len(COLORS)/2)):
 # need to add change toolbar button.
 for i in range(10):
     if i == 0:
-        buttons.append(Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,(i*button_height)+10,65,30,WHITE,image_url = "assets/dark.png",name="Theme"))#Dark and Light Theme
+        buttons.append(Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,(i*button_height)+10,65,38,WHITE,image_url = "assets/dark.png",name="Theme"))#Dark and Light Theme
     else: 
         buttons.append(Button(HEIGHT - 2*button_width,(i*button_height)+5,button_width,button_height,WHITE,"B"+str(i-1), BLACK,isBorder=True))#append tools
 
@@ -302,10 +292,11 @@ while run:
         if pygame.mouse.get_pressed()[0]:
             pos = pygame.mouse.get_pos()
             try:
-                row, col = get_row_col_from_pos(pos)
+                row, col = ColorWindow.get_row_col_from_pos(pos)
                 if picking:
                     pickedColor = pickColor()
                     drawing_color = pickedColor
+
                     if back:
                         background.color = drawing_color
                     if fore:
@@ -336,13 +327,13 @@ while run:
                     if button.name == "Theme" and theme.getMode() == 'dark':
                         theme.setMode('light')
                         buttons.pop(18)
-                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,10,65,30,WHITE,image_url = "assets/dark.png",name="Theme"))
+                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,10,65,38,WHITE,image_url = "assets/dark.png",name="Theme"))
                         BG_COLOR = WHITE
                         break
                     if button.name == "Theme" and theme.getMode() == 'light':
                         theme.setMode('dark')
                         buttons.pop(18)
-                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,10,65,30,WHITE,image_url = "assets/light.png",name="Theme"))
+                        buttons.insert(18,Button(WIDTH+RIGHT_TOOLBAR_WIDTH/2 -65/2,10,65,38,WHITE,image_url = "assets/light.png",name="Theme"))
                         BG_COLOR = DARKGRAY
                         break
 
@@ -363,7 +354,8 @@ while run:
                         break
 
                     if button.name == "ColorPicker":
-                        picking=True
+                        picking= not picking
+                        print(picking)
                         break
                     if button.name == "ColorWindow":
                         pal = ColorWindow(theme)

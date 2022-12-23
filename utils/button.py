@@ -2,7 +2,7 @@ from turtle import pos
 from .settings import *
 
 class Button:
-    def __init__(self, x, y, width, height, color = (0, 0, 0), text=None, text_color=BLACK, shape = "rectangle", image_url = "/", name=None,pallete =False,isBorder=False):
+    def __init__(self, x, y, width, height, color = (0, 0, 0), text="", text_color=BLACK, shape = "rectangle", image_url = "/", name=None,pallete =False,isBorder=False,isBorderRadius=False):
         self.x = x
         self.y = y
         self.width = width
@@ -16,6 +16,8 @@ class Button:
         self.border_color = DARKGRAY
         self.isPallete = pallete
         self.isBorder=isBorder
+        self.isBorderRadius=isBorderRadius
+        self.input_box_selected=False
 
     def draw(self, win):
         # Draws button with an image
@@ -26,13 +28,17 @@ class Button:
          
 
         elif self.shape == "rectangle":
-            pygame.draw.rect(win, self.color,(self.x, self.y, self.width, self.height))
+            if self.isBorderRadius:     
+                pygame.draw.rect(win, self.color,(self.x, self.y, self.width, self.height),border_radius=2)
+            else:
+                pygame.draw.rect(win, self.color,(self.x, self.y, self.width, self.height))
             if self.isBorder:
                 pygame.draw.rect(win, BLACK,(self.x, self.y, self.width, self.height), 2)
 
         elif self.shape == "ellipse":
             pygame.draw.ellipse(win, self.color, (self.x, self.y, self.width, self.height)) #fill
-            # pygame.draw.ellipse(win, BLACK, (self.x, self.y, self.width, self.height), 2) #border
+            if self.isBorder:
+                pygame.draw.ellipse(win, BLACK, (self.x, self.y, self.width, self.height), 2) #border
 
         if self.text:
             button_font = get_font(int(self.width/2) - 6,self.isPallete)

@@ -21,7 +21,7 @@ TEAL            = (0, 128, 128)
 GREEN           = (0, 128, 0)
 FUCHSIA         = (255, 0, 255)
 BG_COLOR_PALLETE_WINDOW = (233, 228, 228)
-
+COLOR_PALLETE_RECT = (248,245,245)
 COLORS = []
 COLORS.append(WHITE)
 COLORS.append(BLACK)
