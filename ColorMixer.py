@@ -23,21 +23,21 @@ class ColorMixer:
         self.buttons.append(Button(self.color_mixer_rect.x+6,
                             self.color_mixer_rect.y+55, 45, 20, COLOR_PALLETE_RECT, "Color 1:", GRAY, pallete=True))
         self.buttons.append(Button(self.color_mixer_rect.x+50, self.color_mixer_rect.y+35,
-                            60, 20, COLOR_PALLETE_RECT, self.text1, GRAY, name="input_box_rh_text", pallete=True,))
+                            60, 20, COLOR_PALLETE_RECT, self.text1, RED, name="input_box_rh_text", pallete=True,))
         self.buttons.append(Button(self.color_mixer_rect.x+50,
                             self.color_mixer_rect.y+55, 60, 20, BG_COLOR_PALLETE_WINDOW, name="input_box1_rh", isBorderRadius=True))
         self.buttons.append(Button(self.color_mixer_rect.x+50, self.color_mixer_rect.y+55,
                                    60, 20, BG_COLOR_PALLETE_WINDOW, text_color=GRAY, name="input_box1_rh_input", pallete=True,))
         # color 1 input box 2
         self.buttons.append(Button(self.color_mixer_rect.x+120, self.color_mixer_rect.y+35,
-                            60, 20, COLOR_PALLETE_RECT, self.text2, GRAY, name="input_box_gs_text", pallete=True))
+                            60, 20, COLOR_PALLETE_RECT, self.text2, GREEN, name="input_box_gs_text", pallete=True))
         self.buttons.append(Button(self.color_mixer_rect.x+120,
                             self.color_mixer_rect.y+55, 60, 20, BG_COLOR_PALLETE_WINDOW, name="input_box1_gs", isBorderRadius=True))
         self.buttons.append(Button(self.color_mixer_rect.x+120, self.color_mixer_rect.y+55,
                                    60, 20, BG_COLOR_PALLETE_WINDOW, text_color=GRAY, name="input_box1_gs_input", pallete=True))
         # color 1 input box 3
         self.buttons.append(Button(self.color_mixer_rect.x+190, self.color_mixer_rect.y+35, 60,
-                            20, COLOR_PALLETE_RECT, self.text3, GRAY, name="input_box_bv_text", pallete=True))
+                            20, COLOR_PALLETE_RECT, self.text3, BLUE, name="input_box_bv_text", pallete=True))
         self.buttons.append(Button(self.color_mixer_rect.x+190,
                             self.color_mixer_rect.y+55, 60, 20, BG_COLOR_PALLETE_WINDOW, name="input_box1_bv", isBorderRadius=True))
         self.buttons.append(Button(self.color_mixer_rect.x+190, self.color_mixer_rect.y+55, 60,
