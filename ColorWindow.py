@@ -12,7 +12,7 @@ class ColorWindow:
     def __init__(self, theme):
         self.theme = theme
         self.custom_color_index = 1
-        self.custom_gradient_index = 1
+        self.custom_gradient_index = 0
         self.color_gradient_image = pygame.image.load("assets/color_gradient.png")
         if (self.theme.getMode() == "dark"):
             self.bg_color = DARKGRAY
@@ -210,27 +210,34 @@ class ColorWindow:
         self.color_mixer.buttons[(self.get_index(
             "color_mixer_preview_box", self.color_mixer.buttons))].color = (color_rh, color_gs, color_bv)
 
-    def preview_gradient(self, color):
+    def preview_gradient(self, color, opacity):
         self.gradient.buttons[(self.get_index(
             "gradient_preview_box", self.gradient.buttons))].color = (color[0],color[1],color[2])
 
+
     def add_to_custom_gradients(self, btns, text):
-        print("added to custom gradients")
-        print(self.custom_gradient_index)
+
         if self.custom_gradient_index> 15:
             print("zero")
             self.custom_gradient_index = 0
         color = btns[(self.get_index(text, btns))].color
+        if color == (248, 245, 245):
+            return
+        print("added to custom gradients")
+        print(self.custom_gradient_index)
         self.custom_gradients_buttons[self.custom_gradient_index].color = color
         self.custom_gradient_index += 1
 
     def add_to_custom_color(self, btns,text):
-        print("added to custom colors")
-        print(self.custom_color_index)
+
         if self.custom_color_index > 15:
             print("zero")
             self.custom_color_index = 0
         color = btns[(self.get_index(text, btns))].color
+        if color == (248, 245, 245):
+            return
+        print("added to custom colors")
+        print(self.custom_color_index)
         self.custom_colors_buttons[self.custom_color_index].color = color
         self.custom_color_index += 1
 
@@ -297,7 +304,7 @@ class ColorWindow:
         gs.init_slider()
 
         # gd = Gradient(win, self.color_gradient_rect)
-        # opacity = 128  # half opaque
+        opacity = 128  # half opaque
         running = True
         while running:
             pygame.display.update()
@@ -311,8 +318,8 @@ class ColorWindow:
                     # Get the color of the pixel at the mouse position
                     if mouse_x > 43 and mouse_x < 162 and mouse_y>305 and mouse_y <383:
                         color = win.get_at((mouse_x, mouse_y))
-                        # print(opacity)
-                        self.preview_gradient(color)
+                        print(opacity)
+                        self.preview_gradient(color, opacity)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y  = event.pos[0], event.pos[1]
@@ -360,7 +367,7 @@ class ColorWindow:
                             button.isBorder = True
                             button.input_box_selected = True
                         elif button.name == "add_to_custom_gradient":
-                            self.add_to_custom_gradients(self.color_mode.buttons,"gradient_preview_box")
+                            self.add_to_custom_gradients(self.gradient.buttons,"gradient_preview_box")
                             # self.reset_color_mode_inputs()
 
                     for button in self.color_mixer.buttons:
@@ -429,7 +436,7 @@ class ColorWindow:
                                 if int(userInput) > 100:
                                     userInput = userInput[0:2]
                                 button.text = userInput
-                                # opacity = button.text
+                                opacity = button.text
 
                     for button in self.color_mixer.buttons:
                         if ((button.name == "input_box1_rh_input" or button.name == "input_box1_gs_input"or button.name == "input_box1_bv_input" or button.name == "input_box2_rh_input" or button.name == "input_box2_gs_input"or button.name == "input_box2_bv_input") and button.input_box_selected):
