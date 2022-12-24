@@ -13,6 +13,7 @@ class ColorWindow:
         self.theme = theme
         self.custom_color_index = 1
         self.custom_gradient_index = 0
+        self.stretch = False
         self.color_gradient_image = pygame.image.load(
             "assets/color_gradient.png")
         if (self.theme.getMode() == "dark"):
@@ -129,6 +130,8 @@ class ColorWindow:
         self.color_mixer.draw(win)
         self.gradient.draw(win)
         self.grayscale.draw(win)
+        if self.stretch:
+            self.gradient.stretchGradient(win, self.gradient.grad_color)
         for button in self.buttons:
             button.draw(win)
         for button in self.custom_colors_buttons:
@@ -275,10 +278,13 @@ class ColorWindow:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # Get the mouse position
                     mouse_x, mouse_y = pygame.mouse.get_pos()
+                    print(mouse_x, mouse_y)
                     # Get the color of the pixel at the mouse position
-                    if mouse_x > 43 and mouse_x < 162 and mouse_y > 305 and mouse_y < 383:
+                    if mouse_x > 43 and mouse_x < 162 and mouse_y > 325 and mouse_y < 405:
                         color = win.get_at((mouse_x, mouse_y))
-                        print(opacity)
+                        self.gradient.grad_color = color
+                        self.stretch = True
+
                         self.preview_gradient(color, opacity)
 
                 if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:

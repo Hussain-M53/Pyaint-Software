@@ -9,6 +9,7 @@ class Gradient:
         self.color_gradient_rect = pygame.Rect(
             color_window_rect.x + color_window_rect.w -540, color_grayscale_rect.y + color_grayscale_rect.h+10 , 260, 130)
         self.buttons = []
+        self.grad_color = ()
         self.add_buttons()
 
     def add_buttons(self):
@@ -51,3 +52,15 @@ class Gradient:
                          self.color_gradient_rect, border_radius=6)
         for button in self.buttons:
             button.draw(win)
+
+
+    def stretchGradient(self, win, color):
+        self.colour_rect = pygame.Surface((2, 2))
+        pygame.draw.line(self.colour_rect, WHITE, (0, 0), (0, 1))
+        pygame.draw.line(self.colour_rect, color, (1, 0), (1, 1))
+        self.colour_rect = pygame.transform.smoothscale(self.colour_rect, (33, self.color_gradient_rect.y - 254))
+
+        win.blit(self.colour_rect,
+                 (self.color_gradient_rect.x + 221, self.color_gradient_rect.y+35))
+        return self.colour_rect
+
