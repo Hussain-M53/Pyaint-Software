@@ -10,8 +10,6 @@ theme = Theme()
 color_picker = ColorPicker()
 color_window = ColorWindow(theme)
 forbackground = ForGroundBackGroundColor()
-back = True
-fore = False
 
 
 def init_grid(rows, columns, color):
@@ -40,13 +38,18 @@ def draw_grid(win, grid):
 
 
 def draw_mouse_position_text(win):
+    if theme.mode == "light":
+        color = BLACK
+    else:
+        color=WHITE    
+
     pos = pygame.mouse.get_pos()
     pos_font = get_font(MOUSE_POSITION_TEXT_SIZE, False)
     try:
         if picking:
             color_picker.preview_zoomed_color(win)
         row, col = ColorWindow.get_row_col_from_pos(pos)
-        text_surface = pos_font.render(str(row) + ", " + str(col), 1, BLACK)
+        text_surface = pos_font.render(str(row) + ", " + str(col), 1, color)
         win.blit(text_surface, (5, HEIGHT - TOOLBAR_HEIGHT))
     except IndexError:
         for button in buttons:
@@ -55,60 +58,60 @@ def draw_mouse_position_text(win):
             if picking:
                 color_picker.preview_zoomed_color(win)
             if button.name == "Clear":
-                text_surface = pos_font.render("Clear Everything", 1, BLACK)
+                text_surface = pos_font.render("Clear Everything", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.name == "Erase":
-                text_surface = pos_font.render("Erase", 1, BLACK)
+                text_surface = pos_font.render("Erase", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.name == "FillBucket":
-                text_surface = pos_font.render("Fill Bucket", 1, BLACK)
+                text_surface = pos_font.render("Fill Bucket", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.name == "Brush":
-                text_surface = pos_font.render("Brush", 1, BLACK)
+                text_surface = pos_font.render("Brush", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.name == "Theme":
-                text_surface = pos_font.render("Swap Theme", 1, BLACK)
+                text_surface = pos_font.render("Swap Theme", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
 
             if button.name == "foreground":
-                text_surface = pos_font.render("foreground", 1, BLACK)
+                text_surface = pos_font.render("foreground", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.name == "background":
-                text_surface = pos_font.render("background", 1, BLACK)
+                text_surface = pos_font.render("background", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.name == "ColorPicker":
-                text_surface = pos_font.render("ColorPicker", 1, BLACK)
+                text_surface = pos_font.render("ColorPicker", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.name == "ColorWindow":
-                text_surface = pos_font.render("ColorPalette", 1, BLACK)
+                text_surface = pos_font.render("ColorPalette", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             r, g, b = button.color
             text_surface = pos_font.render(
-                "( " + str(r) + ", " + str(g) + ", " + str(b) + " )", 1, BLACK)
+                "( " + str(r) + ", " + str(g) + ", " + str(b) + " )", 1, color)
             win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
 
         for button in brush_widths:
             if not button.hover(pos):
                 continue
             if button.width == size_small:
-                text_surface = pos_font.render("Small-Sized Brush", 1, BLACK)
+                text_surface = pos_font.render("Small-Sized Brush", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.width == size_medium:
-                text_surface = pos_font.render("Medium-Sized Brush", 1, BLACK)
+                text_surface = pos_font.render("Medium-Sized Brush", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
             if button.width == size_large:
-                text_surface = pos_font.render("Large-Sized Brush", 1, BLACK)
+                text_surface = pos_font.render("Large-Sized Brush", 1, color)
                 win.blit(text_surface, (10, HEIGHT - TOOLBAR_HEIGHT))
                 break
 
@@ -129,11 +132,11 @@ def draw(win, grid, buttons):
 def draw_brush_widths(win):
     brush_widths = [
         Button(rtb_x - size_small/2, 568, size_small,
-               size_small, drawing_color, None, None, "ellipse"),
+               size_small, forground.color, None, None, "ellipse"),
         Button(rtb_x - size_medium/2, 568+size_small+5, size_medium,
-               size_medium, drawing_color, None, None, "ellipse"),
+               size_medium, forground.color, None, None, "ellipse"),
         Button(rtb_x - size_large/2, 568+size_small+size_medium+10,
-               size_large, size_large, drawing_color, None, None, "ellipse")
+               size_large, size_large, forground.color, None, None, "ellipse")
     ]
     for button in brush_widths:
         button.draw(win)
@@ -164,7 +167,7 @@ def get_position(pos):
 
 def paint_using_brush(row, col, size):
     if BRUSH_SIZE == 1:
-        grid[row][col] = drawing_color
+        grid[row][col] = forground.color
     else:  # for values greater than 1
         r = row-BRUSH_SIZE+1
         c = col-BRUSH_SIZE+1
@@ -173,7 +176,7 @@ def paint_using_brush(row, col, size):
             for j in range(BRUSH_SIZE*2-1):
                 if r+i < 0 or c+j < 0 or r+i >= ROWS or c+j >= COLS:
                     continue
-                grid[r+i][c+j] = drawing_color
+                grid[r+i][c+j] = forground.color
 
 # Checks whether the coordinated are within the canvas
 
@@ -239,7 +242,6 @@ run = True
 
 clock = pygame.time.Clock()
 grid = init_grid(ROWS, COLS, BG_COLOR)
-drawing_color = BLACK
 button_width = 40
 button_height = 40
 button_y_top_row = HEIGHT - TOOLBAR_HEIGHT/2 - button_height - 1
@@ -251,13 +253,19 @@ size_medium = 35
 size_large = 50
 
 rtb_x = WIDTH + RIGHT_TOOLBAR_WIDTH/2
+# background = Button(0, HEIGHT - TOOLBAR_HEIGHT/2 - 30, 60, 60, forground.color)
+background = Button(30, HEIGHT - TOOLBAR_HEIGHT/2 - 15, button_width, button_height,
+                    forbackground.getBackgroundColor(), name="background", isBorder=True)
+forground = Button(10, HEIGHT - TOOLBAR_HEIGHT/2 - 30, button_width, button_height,
+                   forbackground.getForegroundColor(), name="foreground", isBorder=True)
+
 brush_widths = [
     Button(rtb_x - size_small/2, 565, size_small,
-           size_small, drawing_color, None, "ellipse"),
+           size_small, forground.color, None, "ellipse"),
     Button(rtb_x - size_medium/2, 565+size_small+5, size_medium,
-           size_medium, drawing_color, None, "ellipse"),
+           size_medium, forground.color, None, "ellipse"),
     Button(rtb_x - size_large/2, 565+size_small+size_medium+10,
-           size_large, size_large, drawing_color, None, "ellipse")
+           size_large, size_large, forground.color, None, "ellipse")
 ]
 # Adding Buttons
 buttons = []
@@ -293,11 +301,6 @@ buttons.append(Button(WIDTH - 3*button_space + 140, 460, 45, 45,
 buttons.append(Button(WIDTH - 3*button_space + 140, 510, 45, 45,
                name="ColorWindow", image_url="assets/color-palette.png"))  # ColorPalette
 
-# background = Button(0, HEIGHT - TOOLBAR_HEIGHT/2 - 30, 60, 60, drawing_color)
-background = Button(30, HEIGHT - TOOLBAR_HEIGHT/2 - 15, button_width, button_height,
-                    forbackground.getBackgroundColor(), name="background", isBorder=True)
-forground = Button(10, HEIGHT - TOOLBAR_HEIGHT/2 - 30, button_width, button_height,
-                   forbackground.getForegroundColor(), name="foreground", isBorder=True)
 buttons.append(background)
 buttons.append(forground)
 picking = False
@@ -313,17 +316,13 @@ while run:
                 row, col = ColorWindow.get_row_col_from_pos(pos)
                 if picking:
                     pickedColor = color_picker.pickColor(WIN)
-                    drawing_color = pickedColor
+                    forground.color = pickedColor
                     color_picker.preview_zoomed_color(WIN)
-                    if back:
-                        forground.color = drawing_color
-                    if fore:
-                        background.color = drawing_color
                 elif STATE == "COLOR":
                     paint_using_brush(row, col, BRUSH_SIZE)
 
                 elif STATE == "FILL":
-                    fill_bucket(row, col, drawing_color)
+                    fill_bucket(row, col, forground.color)
 
             except IndexError:
                 for button in buttons:
@@ -335,15 +334,14 @@ while run:
                         break
                     if picking:
                         pickedColor = color_picker.pickColor(WIN)
-                        drawing_color = pickedColor
+                        forground.color = pickedColor
                         color_picker.preview_zoomed_color(WIN)
                         print("outside grid")
                         break
                     elif button.name == "Clear":
                         grid = init_grid(ROWS, COLS, WHITE)
-                        drawing_color = BLACK
-                        background.color = drawing_color
-                        forground.color = WHITE
+                        forground.color = BLACK
+                        background.color = WHITE
                         STATE = "COLOR"
                         break
                     elif button.name == "FillBucket":
@@ -371,26 +369,13 @@ while run:
                         picking= not picking
                         print(picking)
                         break
-                    if button.name == "ColorWindow":
+                    elif button.name == "ColorWindow":
                         color_window.run(WIN)
                         break
-                    elif button.name == "background":
-                        back = True
-                        fore = False 
-                        drawing_color = button.color
+                    if button.name == "foreground":
                         background.color,forground.color = forground.color,background.color  
 
-                    if button.name == "foreground":
-                        drawing_color = button.color
-                        back = False
-                        fore = True
-                        break
-                    if back:
-                        forground.color = drawing_color
-                    else:
-                        background.color = drawing_color
-                        
-                    drawing_color=  button.color
+                    forground.color=button.color                        
 
                 for button in brush_widths:
                     if not button.clicked(pos):

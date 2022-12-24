@@ -13,7 +13,8 @@ class ColorWindow:
         self.theme = theme
         self.custom_color_index = 1
         self.custom_gradient_index = 0
-        self.color_gradient_image = pygame.image.load("assets/color_gradient.png")
+        self.color_gradient_image = pygame.image.load(
+            "assets/color_gradient.png")
         if (self.theme.getMode() == "dark"):
             self.bg_color = DARKGRAY
             self.text_color = BG_COLOR_PALLETE_WINDOW
@@ -127,6 +128,7 @@ class ColorWindow:
         self.color_mode.draw(win)
         self.color_mixer.draw(win)
         self.gradient.draw(win)
+        self.grayscale.draw(win)
         for button in self.buttons:
             button.draw(win)
         for button in self.custom_colors_buttons:
@@ -203,12 +205,11 @@ class ColorWindow:
 
     def preview_gradient(self, color, opacity):
         self.gradient.buttons[(self.get_index(
-            "gradient_preview_box", self.gradient.buttons))].color = (color[0],color[1],color[2])
-
+            "gradient_preview_box", self.gradient.buttons))].color = (color[0], color[1], color[2])
 
     def add_to_custom_gradients(self, btns, text):
 
-        if self.custom_gradient_index> 15:
+        if self.custom_gradient_index > 15:
             print("zero")
             self.custom_gradient_index = 0
         color = btns[(self.get_index(text, btns))].color
@@ -219,13 +220,11 @@ class ColorWindow:
         self.custom_gradients_buttons[self.custom_gradient_index].color = color
         self.custom_gradient_index += 1
 
-    def add_to_custom_color(self, btns,text):
+    def add_to_custom_color(self, btns, text):
         if self.custom_color_index > 15:
             print("zero")
             self.custom_color_index = 0
         color = btns[(self.get_index(text, btns))].color
-        if color == (248, 245, 245):
-            return
         print("added to custom colors")
         print(self.custom_color_index)
         self.custom_colors_buttons[self.custom_color_index].color = color
@@ -263,9 +262,6 @@ class ColorWindow:
         pygame.draw.rect(
             win, COLOR_PALLETE_RECT, self.custom_gradient_rect, border_radius=4)
 
-        # Grayscale Slider
-        self.grayscale.init_slider(win)
-
         # gd = Gradient(win, self.color_gradient_rect)
         opacity = 128  # half opaque
         running = True
@@ -273,24 +269,23 @@ class ColorWindow:
             pygame.display.update()
             # for loop through the event queue
             for event in pygame.event.get():
+                # Check for QUIT event
                 if event.type == pygame.QUIT:  # if user closed the program
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # Get the mouse position
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     # Get the color of the pixel at the mouse position
-                    if mouse_x > 43 and mouse_x < 162 and mouse_y>305 and mouse_y <383:
+                    if mouse_x > 43 and mouse_x < 162 and mouse_y > 305 and mouse_y < 383:
                         color = win.get_at((mouse_x, mouse_y))
                         print(opacity)
                         self.preview_gradient(color, opacity)
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    x, y  = event.pos[0], event.pos[1]
-                    if x > 45 and x < 180 and y > 100 and y < 500:
+                if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+                    x, y = event.pos[0], event.pos[1]
+                    if x > self.grayscale.color_grayscale_rect.x+10 and x < self.grayscale.color_grayscale_rect.x + 140 and y > self.grayscale.color_grayscale_rect.y+40 and y < self.grayscale.color_grayscale_rect.y + 70:
                         print("drag")
-                        self.grayscale.slider_value = x
-                        self.grayscale.draw(win)
-                # Check for QUIT event
+                        self.grayscale.set_slider(win)
                 if pygame.mouse.get_pressed()[0]:
                     pos = pygame.mouse.get_pos()
                     for button in self.buttons:
@@ -327,15 +322,16 @@ class ColorWindow:
 
                     for button in self.gradient.buttons:
                         if not button.clicked(pos):
-                            if (button.name == "input_gradient_box1_input") and button.input_box_selected:
+                            if (button.name == "input_box") and button.input_box_selected:
                                 button.input_box_selected = False
                                 button.isBorder = False
                             continue
-                        elif button.name == "input_gradient_box1_input":
+                        elif button.name == "input_box":
                             button.isBorder = True
                             button.input_box_selected = True
                         elif button.name == "add_to_custom_gradient":
-                            self.add_to_custom_gradients(self.gradient.buttons,"gradient_preview_box")
+                            self.add_to_custom_gradients(
+                                self.gradient.buttons, "gradient_preview_box")
                             # self.reset_color_mode_inputs()
 
                     for button in self.color_mixer.buttons:
@@ -364,6 +360,11 @@ class ColorWindow:
                             self.add_to_custom_color(
                                 self.color_mixer.buttons, "color_mixer_preview_box")
                             self.reset_mixer_inputs()
+                    for button in self.grayscale.buttons:
+                        if not button.clicked(pos):
+                            continue
+                        if button.name  == "add_to_grayscale_colors":
+                            self.grayscale.add_to_grayscale_color()
 
                 if event.type == pygame.KEYDOWN:
                     for button in self.color_mode.buttons:
@@ -400,8 +401,8 @@ class ColorWindow:
                                 userInput = userInput[:-1]
                                 button.text = userInput
                             elif (
-                                    event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9
-                                ) and len(button.text) < 3:
+                                event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9
+                            ) and len(button.text) < 3:
                                 userInput = button.text
                                 userInput += event.unicode
                                 if int(userInput) > 100:
