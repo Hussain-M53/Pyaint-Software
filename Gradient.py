@@ -22,10 +22,10 @@ class Gradient:
                                    55, 20, COLOR_PALLETE_RECT, text= "opacity", text_color=GRAY, name="input_box_text",
                                    pallete=True,))
         self.buttons.append(Button(self.color_gradient_rect.x + 200,
-                                   self.color_gradient_rect.y + 75, 55, 20, BG_COLOR_PALLETE_WINDOW, name="input_box",
+                                   self.color_gradient_rect.y + 75, 55, 20, BG_COLOR_PALLETE_WINDOW, name="gradient_input_box",
                                    isBorderRadius=True))
         self.buttons.append(Button(self.color_gradient_rect.x + 200, self.color_gradient_rect.y + 75,
-                                   55, 20, BG_COLOR_PALLETE_WINDOW, text_color=GRAY, name="gradient_box_input",
+                                   55, 20, BG_COLOR_PALLETE_WINDOW, text_color=GRAY, name="gradient_input_box_input",
                                    pallete=True, ))
 
         # preview color box

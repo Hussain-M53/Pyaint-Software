@@ -322,11 +322,11 @@ class ColorWindow:
 
                     for button in self.gradient.buttons:
                         if not button.clicked(pos):
-                            if (button.name == "input_box") and button.input_box_selected:
+                            if (button.name == "gradient_input_box_input") and button.input_box_selected:
                                 button.input_box_selected = False
                                 button.isBorder = False
                             continue
-                        elif button.name == "input_box":
+                        elif button.name == "gradient_input_box_input":
                             button.isBorder = True
                             button.input_box_selected = True
                         elif button.name == "add_to_custom_gradient":
