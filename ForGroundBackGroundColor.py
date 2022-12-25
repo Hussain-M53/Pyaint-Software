@@ -3,8 +3,8 @@ from utils import BLACK, WHITE
 
 class ForGroundBackGroundColor:
     def __init__(self):
-        self.forgroundColor = WHITE
-        self.backgroundColor = BLACK
+        self.forgroundColor = BLACK
+        self.backgroundColor = WHITE
 
     def setForegroundColor(self, FGcolor):
         self.forgroundColor = FGcolor
