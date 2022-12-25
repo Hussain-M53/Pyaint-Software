@@ -8,6 +8,7 @@ class Gradient:
         self.buttons = []
         self.rect = []
         self.grad_color = ()
+        self.custom_gradient_index=0
         self.added_to_custom_grad = False
         self.add_buttons()
 
@@ -67,7 +68,9 @@ class Gradient:
         pygame.draw.line(self.colour_rect, WHITE, (0, 0), (0, 1))
         pygame.draw.line(self.colour_rect, color, (1, 0), (1, 1))
         self.colour_rect = pygame.transform.smoothscale(self.colour_rect, (23, self.color_gradient_rect.y - 262))
-        self.rect.append(self.colour_rect)
+        if self.custom_gradient_index >15:
+            self.custom_gradient_index=0
+        self.rect.insert(self.custom_gradient_index,self.colour_rect)
         if i < 8:
             win.blit(self.colour_rect,
                  (self.color_gradient_rect.x + 11 + (i*30)+i, self.color_gradient_rect.y + 182))
