@@ -69,12 +69,10 @@ class Grayscale:
 
     def add_to_grayscale_color(self):
         if self.grayscale_index > 13:
-            print("zero")
             self.grayscale_index = 1
         for button in self.buttons:
             if button.name == "grayscale_mode_preview_box":
                 color = button.color
-        print("added to grayscale colors")
-        print(self.grayscale_index)
+        print("Added to Grayscale colors")
         self.buttons[self.grayscale_index].color = color
         self.grayscale_index += 1
