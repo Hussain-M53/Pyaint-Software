@@ -11,7 +11,6 @@ color_picker = ColorPicker()
 color_window = ColorWindow(theme)
 forbackground = ForGroundBackGroundColor()
 
-
 def init_grid(rows, columns, color):
     grid = []
 
@@ -41,7 +40,7 @@ def draw_mouse_position_text(win):
     if theme.mode == "light":
         color = BLACK
     else:
-        color=WHITE    
+        color=WHITE
 
     pos = pygame.mouse.get_pos()
     pos_font = get_font(MOUSE_POSITION_TEXT_SIZE, False)
@@ -239,9 +238,9 @@ def fill_bucket(row, col, color):
 
 
 run = True
-
 clock = pygame.time.Clock()
 grid = init_grid(ROWS, COLS, BG_COLOR)
+
 button_width = 40
 button_height = 40
 button_y_top_row = HEIGHT - TOOLBAR_HEIGHT/2 - button_height - 1
@@ -253,11 +252,14 @@ size_medium = 35
 size_large = 50
 
 rtb_x = WIDTH + RIGHT_TOOLBAR_WIDTH/2
-# background = Button(0, HEIGHT - TOOLBAR_HEIGHT/2 - 30, 60, 60, forground.color)
+
 background = Button(30, HEIGHT - TOOLBAR_HEIGHT/2 - 15, button_width, button_height,
                     forbackground.getBackgroundColor(), name="background", isBorder=True)
 forground = Button(10, HEIGHT - TOOLBAR_HEIGHT/2 - 30, button_width, button_height,
                    forbackground.getForegroundColor(), name="foreground", isBorder=True)
+back = False
+fore = True
+
 
 brush_widths = [
     Button(rtb_x - size_small/2, 565, size_small,
@@ -300,7 +302,6 @@ buttons.append(Button(WIDTH - 3*button_space + 140, 460, 45, 45,
                name="ColorPicker", image_url="assets/color-picker.png"))  # ColorPicker
 buttons.append(Button(WIDTH - 3*button_space + 140, 510, 45, 45,
                name="ColorWindow", image_url="assets/color-palette.png"))  # ColorPalette
-
 buttons.append(background)
 buttons.append(forground)
 picking = False
@@ -315,29 +316,20 @@ while run:
             try:
                 row, col = ColorWindow.get_row_col_from_pos(pos)
                 if picking:
+                    color_picker.preview_zoomed_color(WIN)
                     pickedColor = color_picker.pickColor(WIN)
                     forground.color = pickedColor
-                    color_picker.preview_zoomed_color(WIN)
                     picking = False
                 elif STATE == "COLOR":
                     paint_using_brush(row, col, BRUSH_SIZE)
-
                 elif STATE == "FILL":
                     fill_bucket(row, col, forground.color)
-
             except IndexError:
                 for button in buttons:
                     if not button.clicked(pos):
                         continue
                     if button.name == "ColorPicker":
-                        picking = not picking
-                        print(picking)
-                        break
-                    if picking:
-                        pickedColor = color_picker.pickColor(WIN)
-                        if pickedColor:
-                            forground.color = pickedColor
-                        color_picker.preview_zoomed_color(WIN)
+                        picking = True
                         break
                     elif button.name == "Clear":
                         grid = init_grid(ROWS, COLS, WHITE)
@@ -347,6 +339,9 @@ while run:
                         break
                     elif button.name == "FillBucket":
                         STATE = "FILL"
+                        break
+                    elif button.name == "Erase":
+                        forground.color = background.color
                         break
                     elif button.name == "Theme" and theme.getMode() == 'dark':
                         theme.setMode('light')
@@ -365,13 +360,25 @@ while run:
                     elif button.name == "Brush":
                         STATE = "COLOR"
                         break
+                    if button.name == "ColorPicker":
+                        picking= True
+                        break
                     elif button.name == "ColorWindow":
                         color_window.run(WIN)
                         break
+                    if button.name == "background":
+                        back = True
+                        fore = False
+                        break
                     if button.name == "foreground":
-                        background.color,forground.color = forground.color,background.color  
-
-                    forground.color=button.color                        
+                        fore = True
+                        back = False
+                    if back:
+                        background.color = button.color
+                        grid = init_grid(ROWS, COLS, background.color)
+                    if fore and picking == False:
+                        forground.color = button.color
+                    break
 
                 for button in brush_widths:
                     if not button.clicked(pos):
