@@ -12,7 +12,7 @@ class ColorPicker:
                 win.get_at(pos)
             )  # get the color of pixel at mouse position
             drawing_color = (color[0], color[1], color[2])
-            return drawing_color
+            return drawing_color   
 
 
     def preview_zoomed_color(self, win):

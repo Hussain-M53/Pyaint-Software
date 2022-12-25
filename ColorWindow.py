@@ -1,6 +1,5 @@
 import math
 import pygame
-
 from Gradient import Gradient
 from Grayscale import Grayscale
 from utils import *
@@ -398,7 +397,7 @@ class ColorWindow:
                                 self.preview_color(self.color_mode.buttons)
 
                     for button in self.gradient.buttons:
-                        if button.name == "gradient_box_input":
+                        if button.name == "gradient_input_box_input":
                             if event.key == pygame.K_BACKSPACE:
                                 userInput = button.text
                                 userInput = userInput[:-1]
