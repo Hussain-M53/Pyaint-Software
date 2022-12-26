@@ -43,7 +43,7 @@ class ColorWindow:
     def get_index(self, name, btns):
         i = 0
         for button in btns:
-            if (button.name == name):
+            if button.name == name:
                 return i
             i += 1
         return -1
@@ -86,9 +86,6 @@ class ColorWindow:
         self.custom_grayscale_buttons = []
         self.buttons.append(Button(self.color_window_rect.w+self.color_window_rect.x-25, self.color_window_rect.y +
                             5, 20, 20, image_url="assets/color_window_exit.png", name="Exit_Color_Window"))
-        self.buttons.append(Button(self.color_window_heading_rect.x+self.color_window_heading_rect.w/2, self.color_window_heading_rect.y,
-                            self.color_window_heading_rect.w, self.color_window_heading_rect.h, text="COLOR PALLETE", text_color=self.text_color, shape="", pallete=True,name="color_pallete"))
-
     # gradient pallete
         self.buttons.append(Button(self.custom_gradient_rect.x+70,
                             self.custom_gradient_rect.y+10, 60, 20, COLOR_PALLETE_RECT, "CUSTOM GRADIENTS", GRAY, pallete=True))
@@ -247,13 +244,11 @@ class ColorWindow:
             "input_box_bv_input", self.color_mode.buttons)].text = ""
 
     def run(self, win):
-        if (self.theme.getMode() == "dark"):
 
+        if self.theme.getMode() == "dark":
             self.bg_color = DARKGRAY
-            self.buttons[self.get_index("color_pallete",self.buttons)].text_color = BG_COLOR_PALLETE_WINDOW
         else:
             self.bg_color = BG_COLOR_PALLETE_WINDOW
-            self.buttons[self.get_index("color_pallete",self.buttons)].text_color = GRAY
             
         pygame.draw.rect(win, self.bg_color,
                          self.color_window_rect, border_radius=5)
@@ -263,6 +258,11 @@ class ColorWindow:
                          self.custom_color_rect, border_radius=6)
         pygame.draw.rect(
             win, COLOR_PALLETE_RECT, self.custom_gradient_rect, border_radius=4)
+
+        text_surface = pygame.font.SysFont('Georgia', 30,bold=True).render("Color Palette", 1, RED)
+        win.blit(text_surface, (
+            self.color_window_heading_rect.x + self.color_window_heading_rect.w / 2 - 50,
+            self.color_window_heading_rect.y))
 
         running = True
         while running:
